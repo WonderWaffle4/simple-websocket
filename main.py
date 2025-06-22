@@ -21,18 +21,9 @@ app.add_middleware(
 TEMPLATES_DIRECTORY = "templates"
 templates = Jinja2Templates(directory=TEMPLATES_DIRECTORY)
 
-class Prompt(BaseModel):
-    content: str
-@app.post("/gpt/prompt/")
-def gpt_prompt(prompt: Prompt):
-    response = make_prompt(prompt.content)
-    html = markdown.markdown(response, extensions=["fenced_code", "codehilite"])
-    return HTMLResponse(content=html)
-
 @app.get("/gpt", response_class=HTMLResponse)
 def gpt(request: Request):
     return templates.TemplateResponse("gpt.html", {"request": request})
-
 
 def parse_reponse(response):
     try:
